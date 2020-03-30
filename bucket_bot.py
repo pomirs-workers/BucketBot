@@ -29,6 +29,17 @@ class BucketBot:
         # low level control method call
         self.__driver(apply_to, speed)
 
+    # Method 'feedback': None - sets motors feedback values
+    # -- arguments --
+    # angles: Tuple<Integer, Integer> - tuple of total angles of motors. Left, then right
+    def feedback_angles(self, angles):
+        # tuple destructuring
+        (new_lw_angle, new_rw_angle) = (angles[0], angles[1])
+
+        delta_lw_angle = new_lw_angle - self.__lw_angle
+        delta_rw_angle = new_rw_angle - self.__rw_angle
+        # TODO count current position
+
     # Method 'stop': None - sets the 0 speed for a <applyFor> wheel(-s)
     # -- arguments --
     # applyTo: String (left|right|both: default) - stop for which wheel
