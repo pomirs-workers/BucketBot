@@ -1,6 +1,12 @@
 class CatchBot:
 
-    # Constructor: <BucketBot instance>
+    # Static method 'test': None - Stuff for testing
+    # -- no arguments --
+    @staticmethod
+    def test():
+        print('OK!')
+
+    # Constructor: <CatchBot instance>
     # -- arguments --
     # config: Dict - initialization options
     def __init__(self, config):
