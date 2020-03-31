@@ -1,4 +1,4 @@
-class BucketBot:
+class CatchBot:
 
     # Constructor: <BucketBot instance>
     # -- arguments --

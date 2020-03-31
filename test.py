@@ -1,4 +1,4 @@
-from bucket_bot import BucketBot
+from catch_bot import CatchBot
 
 
 def me(a, b):
