@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO
 from lib.pi_pwm.module import PWM
 
+
 class Motor:
 
     @staticmethod
