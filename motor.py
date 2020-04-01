@@ -72,7 +72,12 @@ class Motor:
                     self.__angle__ -= 1
             self.__l_enc_a__ = enc_a
             if self.config['log']:
-                print('[update] O/N/D = ' + str(old_angle) + '/' + str(self.__angle__) + '/' + str(self.__angle__ - old_angle))
+                print(
+                    '[update] O/N/D = ' +
+                    str(old_angle) + '/' +
+                    str(self.__angle__) + '/' +
+                    str(self.__angle__ - old_angle)
+                )
             return self.__angle__ - old_angle
         return 0
 
