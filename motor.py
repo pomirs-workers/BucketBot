@@ -13,6 +13,8 @@ class Motor:
         self.pin_a = config['pin_a']
         self.pin_b = config['pin_b']
         self.pin_pwm = config['pin_pwm']
+        self.pin_enc_a = config['pin_enc_a']
+        self.pin_enc_b = config['pin_enc_b']
         self.pwm_channel = PWM(self.pin_pwm)
         self.angle = 0.0
         GPIO.setup(self.pin_a, GPIO.OUT)
@@ -44,7 +46,7 @@ class Motor:
 
     def update(self):
         old_angle = self.angle
-        new_angle = 0
+        new_angle = 0  # TODO
         self.angle = new_angle
         return new_angle - old_angle
 
