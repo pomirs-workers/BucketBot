@@ -13,7 +13,7 @@ class Motor:
 
     def __init__(self, config):
         self.__config__ = config
-        self.__pwm_ch__ = PWM(self.__config__['pin_pwm'])
+#        self.__pwm_ch__ = PWM(self.__config__['pin_pwm'])
         self.__angle__ = 0.0
         self.__speed__ = 0.0
 
@@ -32,15 +32,15 @@ class Motor:
     def __apply__(self, speed):
         self.__speed__ = speed
         if speed == 0:
-            self.__pwm_ch__.set(0)
+ #           self.__pwm_ch__.set(0)
             GPIO.output(self.__config__['m_a'], False)
             GPIO.output(self.__config__['m_b'], False)
         elif speed > 0:
-            self.__pwm_ch__.set(speed)
+  #          self.__pwm_ch__.set(speed)
             GPIO.output(self.__config__['m_a'], True)
             GPIO.output(self.__config__['m_b'], False)
         else:
-            self.__pwm_ch__.set(-1 * speed)
+   #         self.__pwm_ch__.set(-1 * speed)
             GPIO.output(self.__config__['m_a'], False)
             GPIO.output(self.__config__['m_b'], True)
 
@@ -52,7 +52,7 @@ class Motor:
     def stop(self):
         if self.__config__['log']:
             print('[stop]')
-        self.go(0)
+        self.__apply__(0)
 
     def reset(self):
         if self.__config__['log']:
