@@ -21,7 +21,7 @@ class Motor:
         self.__apply__(0)
 
         self.__angle_t__ = 0
-        self.__l_enc_a__ = 0
+        self.__l_en_a__ = 0
 
     def __gpio_init__(self):
         GPIO.setup(self.__config__['m_a'], GPIO.OUT)
@@ -63,14 +63,14 @@ class Motor:
         time_mow = time.time()
         old_angle = self.__angle__
         if time_mow - self.__angle_t__ > UPD_FREQ:
-            enc_a = GPIO.input(self.__config__['enc_a'])
-            enc_b = GPIO.input(self.__config__['enc_b'])
-            if not enc_a and self.__l_enc_a__:
-                if enc_b:
+            en_a = GPIO.input(self.__config__['en_a'])
+            en_b = GPIO.input(self.__config__['en_b'])
+            if not en_a and self.__l_en_a__:
+                if en_b:
                     self.__angle__ += 1
                 else:
                     self.__angle__ -= 1
-            self.__l_enc_a__ = enc_a
+            self.__l_en_a__ = en_a
             if self.__config__['log']:
                 print(
                     '[update] O/N/D = ' +
