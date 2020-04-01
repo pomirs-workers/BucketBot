@@ -13,7 +13,7 @@ class Motor:
 
     def __init__(self, config):
         self.__config__ = config
-        self.__pwm_ch__ = PWM(self.__config__.pin_pwm)
+        self.__pwm_ch__ = PWM(self.__config__['pin_pwm'])
         self.__angle__ = 0.0
         self.__speed__ = 0.0
 
