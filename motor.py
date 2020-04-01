@@ -10,56 +10,61 @@ class Motor:
         GPIO.setwarnings(False)
 
     def __init__(self, config):
-        self.pin_a = config['pin_a']
-        self.pin_b = config['pin_b']
-        self.pin_pwm = config['pin_pwm']
-        self.pin_enc_a = config['pin_enc_a']
-        self.pin_enc_b = config['pin_enc_b']
-        self.log = config['log']
-        self.pwm_channel = PWM(self.pin_pwm)
-        self.angle = 0.0
-        self.speed = 0.0
-        GPIO.setup(self.pin_a, GPIO.OUT)
-        GPIO.setup(self.pin_b, GPIO.OUT)
+        self.__config__ = config
+        self.__pwm_ch__ = PWM(self.__config__.pin_pwm)
+        self.__angle__ = 0.0
+        self.__speed__ = 0.0
+
+        self.__gpio_init__()
         self.__apply__(0)
 
+    def __gpio_init__(self):
+        GPIO.setup(self.__config__['pin_a'], GPIO.OUT)
+        GPIO.setup(self.__config__['pin_b'], GPIO.OUT)
+
     def __apply__(self, speed):
-        self.speed = speed
+        self.__speed__ = speed
         if speed == 0:
-            self.pwm_channel.set(0)
-            GPIO.output(self.pin_a, False)
-            GPIO.output(self.pin_b, False)
+            self.self.__pwm_ch__.set(0)
+            GPIO.output(self.__config__['pin_a'], False)
+            GPIO.output(self.__config__['pin_b'], False)
         elif speed > 0:
-            self.pwm_channel.set(speed)
-            GPIO.output(self.pin_a, True)
-            GPIO.output(self.pin_b, False)
+            self.self.__pwm_ch__.set(speed)
+            GPIO.output(self.__config__['pin_a'], True)
+            GPIO.output(self.__config__['pin_b'], False)
         else:
-            self.pwm_channel.set(-1 * speed)
-            GPIO.output(self.pin_a, False)
-            GPIO.output(self.pin_b, True)
+            self.self.__pwm_ch__.set(-1 * speed)
+            GPIO.output(self.__config__['pin_a'], False)
+            GPIO.output(self.__config__['pin_b'], True)
 
     def go(self, speed):
-        if self.log:
+        if self.config['log']:
             print('[go] speed = ' + str(speed))
         self.__apply__(speed)
 
     def stop(self):
-        if self.log:
+        if self.config['log']:
             print('[stop]')
         self.go(0)
 
     def reset(self):
-        if self.log:
+        if self.config['log']:
             print('[reset]')
-        self.angle = 0
+        self.__angle__ = 0
 
     def update(self):
-        old_angle = self.angle
+        old_angle = self.__angle__
         new_angle = 0  # TODO
-        self.angle = new_angle
-        if self.log:
+        self.__angle__ = new_angle
+        if self.config['log']:
             print('[update] O/N/D = ' + str(old_angle) + '/' + str(new_angle) + '/' + str(new_angle - old_angle))
         return new_angle - old_angle
 
     def get_angle(self):
-        return self.angle
+        return self.__angle__
+    
+    def get_speed(self):
+        return self.__speed__
+    
+    def get_config(self):
+        return self.__config__
