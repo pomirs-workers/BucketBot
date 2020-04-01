@@ -4,8 +4,8 @@ import time
 
 UPD_FREQ = 0.005  # in seconds
 
-class Motor:
 
+class Motor:
     @staticmethod
     def apply_requirements():
         GPIO.setmode(GPIO.BOARD)
@@ -32,30 +32,30 @@ class Motor:
     def __apply__(self, speed):
         self.__speed__ = speed
         if speed == 0:
-            self.self.__pwm_ch__.set(0)
+            self.__pwm_ch__.set(0)
             GPIO.output(self.__config__['m_a'], False)
             GPIO.output(self.__config__['m_b'], False)
         elif speed > 0:
-            self.self.__pwm_ch__.set(speed)
+            self.__pwm_ch__.set(speed)
             GPIO.output(self.__config__['m_a'], True)
             GPIO.output(self.__config__['m_b'], False)
         else:
-            self.self.__pwm_ch__.set(-1 * speed)
+            self.__pwm_ch__.set(-1 * speed)
             GPIO.output(self.__config__['m_a'], False)
             GPIO.output(self.__config__['m_b'], True)
 
     def go(self, speed):
-        if self.config['log']:
+        if self.__config__['log']:
             print('[go] speed = ' + str(speed))
         self.__apply__(speed)
 
     def stop(self):
-        if self.config['log']:
+        if self.__config__['log']:
             print('[stop]')
         self.go(0)
 
     def reset(self):
-        if self.config['log']:
+        if self.__config__['log']:
             print('[reset]')
         self.__angle__ = 0
 
@@ -71,7 +71,7 @@ class Motor:
                 else:
                     self.__angle__ -= 1
             self.__l_enc_a__ = enc_a
-            if self.config['log']:
+            if self.__config__['log']:
                 print(
                     '[update] O/N/D = ' +
                     str(old_angle) + '/' +
