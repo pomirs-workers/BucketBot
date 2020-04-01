@@ -15,6 +15,7 @@ class Motor:
         self.pin_pwm = config['pin_pwm']
         self.pin_enc_a = config['pin_enc_a']
         self.pin_enc_b = config['pin_enc_b']
+        self.log = config['log']
         self.pwm_channel = PWM(self.pin_pwm)
         self.angle = 0.0
         GPIO.setup(self.pin_a, GPIO.OUT)
@@ -36,18 +37,26 @@ class Motor:
             GPIO.output(self.pin_b, True)
 
     def go(self, speed):
+        if self.log:
+            print('[go] speed = ' + str(speed))
         self.__apply__(speed)
 
     def stop(self):
+        if self.log:
+            print('[stop]')
         self.go(0)
 
     def reset(self):
+        if self.log:
+            print('[reset]')
         self.angle = 0
 
     def update(self):
         old_angle = self.angle
         new_angle = 0  # TODO
         self.angle = new_angle
+        if self.log:
+            print('[update] O/N/D = ' + str(old_angle) + '/' + str(new_angle) + '/' + str(new_angle - old_angle))
         return new_angle - old_angle
 
     def get_angle(self):
