@@ -18,11 +18,13 @@ class Motor:
         self.log = config['log']
         self.pwm_channel = PWM(self.pin_pwm)
         self.angle = 0.0
+        self.speed = 0.0
         GPIO.setup(self.pin_a, GPIO.OUT)
         GPIO.setup(self.pin_b, GPIO.OUT)
         self.__apply__(0)
 
     def __apply__(self, speed):
+        self.speed = speed
         if speed == 0:
             self.pwm_channel.set(0)
             GPIO.output(self.pin_a, False)
