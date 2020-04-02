@@ -1,9 +1,5 @@
 import RPi.GPIO as GPIO
 from lib.pi_pwm.module import PWM
-import time
-
-UPD_FREQ = 0.005  # in seconds
-
 
 class Motor:
     @staticmethod
@@ -20,14 +16,13 @@ class Motor:
         self.__gpio_init__()
         self.__apply__(0)
 
-        self.__angle_t__ = 0
-        self.__l_en_a__ = 0
+        self.__prev_code__ = 0
 
     def __gpio_init__(self):
         GPIO.setup(self.__config__['m_a'], GPIO.OUT)
         GPIO.setup(self.__config__['m_b'], GPIO.OUT)
-        GPIO.setup(self.__config__['en_a'], GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        GPIO.setup(self.__config__['en_b'], GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(self.__config__['en_a'], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        GPIO.setup(self.__config__['en_b'], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
     def __apply__(self, speed):
         self.__speed__ = speed
@@ -43,6 +38,14 @@ class Motor:
             self.__pwm_ch__.set(-1 * speed)
             GPIO.output(self.__config__['m_a'], False)
             GPIO.output(self.__config__['m_b'], True)
+
+    def __graydecode__(self, _gray):
+        bin = 0
+        gray = _gray
+        while gray > 0:
+            bin ^= gray
+            gray >>= 1
+        return bin
 
     def go(self, speed):
         if self.__config__['log']:
@@ -60,18 +63,17 @@ class Motor:
         self.__angle__ = 0
 
     def update(self):
-        time_mow = time.time()
-        if time_mow - self.__angle_t__ > UPD_FREQ:
-            en_a = GPIO.input(self.__config__['en_a'])
-            en_b = GPIO.input(self.__config__['en_b'])
-            if not en_a and self.__l_en_a__:
-                if en_b:
-                    self.__angle__ += 1
-                else:
-                    self.__angle__ -= 1
-            self.__l_en_a__ = en_a
-            if self.__config__['log']:
-                print('[update] angle = ' + str(self.__angle__))
+        en_a = GPIO.input(self.__config__['en_a'])
+        en_b = GPIO.input(self.__config__['en_b'])
+        code = self.__graydecode__(en_a | (en_b << 1))
+        if code == 0:
+            if self.__prev_code__ == 3:
+                self.__angle__ += self.__config__['deg_per_tick']
+            if self.__prev_code__ == 1:
+                self.__angle__ -= self.__config__['deg_per_tick']
+        self.__prev_code__ = code
+        if self.__config__['log']:
+            print('[update] angle = ' + str(self.__angle__))
 
     def get_angle(self):
         return self.__angle__
