@@ -6,6 +6,15 @@ class Motor:
     def apply_requirements():
         GPIO.setmode(GPIO.BOARD)
         GPIO.setwarnings(False)
+        GPIO.setup(22, GPIO.OUT)
+
+    @staticmethod
+    def lock_all():
+        GPIO.output(22, False)
+
+    @staticmethod
+    def unlock_all():
+        GPIO.output(22, True)
 
     def __init__(self, config):
         self.__config__ = config
